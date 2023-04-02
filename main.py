@@ -14,27 +14,22 @@ def read_queries():
 def write_responses(query):
     print('\n'.join(result))
     
-def add_contact(contacts, cur_query):
-    contacts[cur_query.number]=cur_query.name
-def del_contact(contacts, cur_query):
-    contacts.pop(cur_query.number,None)
-def find_contact(contacts, cur_query, result):
-    if cur_query.number in contacts:
-        return contacts[cur_query.number]
-    else:
-        return "not found"
 def process_queries(queries):
     result = []
     # Keep list of all existing (i.e. not deleted yet) contacts.
     contacts = {}
-    case = {
-        'add':add_contact,
-        'del':del_contact,
-        'find':find_contact
-    }
     for cur_query in queries:
-        if cur_query.type in case:
-            case[cur_query.type](contacts,cur_query,result)
+    #add
+        if cur_query.type=='add':
+            contacts[cur_query.number]=cur_query.name
+        elif cur_query.type=='del':
+            if cur_query.number in contacts:
+                del contacts[cur_query.number]
+        else:
+            if cur_query.number in contacts:
+                result.append(contacts[cur_query.number])
+            else:
+                result.append("not found")
     return result
 
 if __name__ == '__main__':
